@@ -9,7 +9,7 @@ from server import *
 from client import *
 import models
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, PolynomialFeatures
-
+import matplotlib.pyplot as plt
 def read_dataset():
 	data_X, data_Y = [], []
 	
@@ -44,6 +44,12 @@ def read_dataset():
 
 if __name__ == '__main__':
 
+  #绘制实时图
+	y_va=[]
+	x_va=[]
+	plt.xlabel('epoch') #x_label
+	plt.ylabel('acc')#y_label
+	
 	parser = argparse.ArgumentParser(description='Federated Learning')
 	parser.add_argument('-c', '--conf', dest='conf')
 	args = parser.parse_args()
@@ -93,5 +99,18 @@ if __name__ == '__main__':
 		
 		
 		acc = server.model_eval()
-			
-		print("Epoch %d, acc: %f\n" % (e, acc))	
+		x_va.append(e)	
+		y_va.append(acc)
+		print("Epoch: %d, acc: %f\n" % (e, acc))	
+		plt.plot(x_va, y_va, 'ro--', alpha=0.5, linewidth=1, label='acc')#'bo-'表示蓝色实线，数据点实心原点标注
+		## plot中参数的含义分别是横轴值，纵轴值，线的形状（'s'方块,'o'实心圆点，'*'五角星   ...，颜色，透明度,线的宽度和标签 ，
+
+		#plt.legend()  #显示上面的label
+
+ 
+		#plt.ylim(-1,1)#仅设置y轴坐标范围
+		#plt.ion()
+		#plt.show()
+		#plt.draw()
+		plt.pause(0.5)
+	plt.show()
